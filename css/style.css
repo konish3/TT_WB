@@ -1,12 +1,12 @@
 body {
-  font-size: 14px !important;
-  font-family: "Roboto";
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
 }
 p {
   margin: 0;
 }
 .container {
-  max-width: 1376px !important;
+  max-width: 1376px;
 }
 .i_active {
   background-color: #f1f1f1;
@@ -29,9 +29,10 @@ p {
 
 /* Header Container  */
 
-header {
+.header {
   box-shadow: 0px 1px 1px 0px #0000001a;
 }
+
 .i_header {
   height: 64px;
   color: #505050;
@@ -39,11 +40,13 @@ header {
   display: flex;
   align-items: center;
 }
+
 .i_header-list {
   display: flex;
-  align-items: center !important;
+  align-items: center;
   justify-content: flex-end;
 }
+
 .i_header-item {
   display: flex;
   flex-direction: column;
@@ -54,15 +57,18 @@ header {
     text-decoration: none;
   }
 }
+
 .i_header-nav {
   background-color: #fafafa;
 
   border-top: 1px solid #d3d8de;
   border-bottom: 1px solid #d3d8de;
 }
+
 .i_left-nav {
   display: flex;
 }
+
 .i_nav_item {
   display: flex;
   justify-content: center;
@@ -70,12 +76,14 @@ header {
 
   height: 40px;
 }
+
 .arrow {
   color: black;
 }
 
 /* Profile Container  */
-main {
+
+.main {
   padding: 32px 0 0px;
   background-color: #f1f1f1;
 
@@ -84,28 +92,31 @@ main {
 
 .i_profile {
   padding: 0;
-  /* max-width: 1080px; */
 
   display: flex;
   justify-content: space-between;
 }
+
 .i_profile-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
 
-  padding: 56px 32px 32px 32px;
+  padding: 56px 32px 32px;
 
   background-color: white;
 }
+
 .i_comment-by {
   color: #8f8f8f;
 }
+
 .i_profile-posts {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
+
 .i_profile-post {
   display: flex;
   align-items: center;
@@ -114,10 +125,12 @@ main {
   padding: 18px 32px;
   background-color: white;
 }
+
 .i_navbar {
   max-width: 264px;
-  padding: 0;
+  margin-left: 32px;
 }
+
 .i_user {
   display: flex;
   flex-direction: column;
@@ -131,12 +144,13 @@ main {
   font-weight: 400;
   color: #505050;
 }
+
 .i_user-about {
   color: #8f8f8f;
 }
+
 .i_navigate-btn {
   background: none !important;
-  --bs-accordion-btn-focus-box-shadow: none;
   box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0
     var(--bs-accordion-border-color) !important;
 
@@ -144,6 +158,7 @@ main {
 
   font-weight: 500;
 }
+
 .i_navigate-body {
   list-style: none;
   display: flex;
@@ -167,10 +182,12 @@ main {
     color: #0d6efd;
   }
 }
+
 .i_navigate-body-balance {
   font-size: 12px;
   color: #8f8f8f;
 }
+
 .i_navigate-body-title-item {
   margin-right: -5px;
 }
@@ -190,13 +207,11 @@ main {
   font-weight: 400;
   color: #505050;
 }
+
 .ya_map {
   font-family: arial;
   font-size: 12px;
   color: #454545;
-
-  /* width: 100%;
-  height: 400px; */
 }
 
 #map {
@@ -204,8 +219,6 @@ main {
   height: 400px;
 
   padding: 0 32px 32px;
-}
-.i_map-loader {
 }
 .loader {
   width: 48px;
@@ -232,6 +245,7 @@ main {
 .i_timer-btn {
   cursor: pointer;
 }
+
 .i_timer {
   padding: 0 32px 32px;
 }
@@ -245,23 +259,13 @@ main {
     left: -100%;
     background-color: #f1f1f1;
     transition: left 0.5s linear;
-    margin: 0 !important;
+    margin-left: 0;
     height: 100vh;
     padding: 18px 18px 36px;
     overflow: scroll;
   }
-  .i_fade {
-    display: none !important;
-  }
+
   .active-user {
     left: 0;
   }
 }
-
-/* @media (width < 576px) {
-  .i_header {
-    p {
-      display: none ;
-    }
-  }
-} */
