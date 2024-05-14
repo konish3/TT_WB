@@ -1,98 +1,127 @@
-document.addEventListener("DOMContentLoaded", () => {
+// Timer
+
+let seconds = 0;
+let minutes = 0;
+let hours = 0;
+const interval = setInterval(updateTime, 1000);
+const firstTime = new Date().getSeconds();
+
+function updateTime() {
   let timer = document.getElementById("timer");
-  let resetBtn = document.getElementById("resetBtn");
-  let deleteBtn = document.getElementById("deleteBtn");
+  if (!timer) return;
 
-  const interval = setInterval(updateTime, 1000);
-
-  let seconds = 0;
-  let minutes = 0;
-  let hours = 0;
-
-  function updateTime() {
-    seconds++;
-    if (seconds === 60) {
-      minutes++;
-      seconds = 0;
-    }
-    if (minutes === 60) {
-      hours++;
-      minutes = 0;
-    }
-    timer.textContent = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
-  resetBtn.addEventListener("click", () => {
-    seconds = 0;
-    minutes = 0;
-    hours = 0;
-    timer.textContent = "00:00:00";
-    resetBtn.disabled = true;
-  });
-  deleteBtn.addEventListener("click", () => {
-    clearInterval(interval);
-    seconds = 0;
-    minutes = 0;
-    hours = 0;
-    timer.textContent = "00:00:00";
-    deleteBtn.disabled = true;
-  });
-
-  const navProfile = document.getElementById("i_nav-profile");
-  const navMap = document.getElementById("i_nav-map");
-  const navTimer = document.getElementById("i_nav-timer");
-
-  navMap.addEventListener("click", () => {
-    navMap.classList.add("i_active");
-    navProfile.classList.remove("i_active");
-    navTimer.classList.remove("i_active");
-  });
-  navProfile.addEventListener("click", () => {
-    navProfile.classList.add("i_active");
-    navMap.classList.remove("i_active");
-    navTimer.classList.remove("i_active");
-  });
-  navTimer.addEventListener("click", () => {
-    navTimer.classList.add("i_active");
-    navProfile.classList.remove("i_active");
-    navMap.classList.remove("i_active");
-  });
-
-  const user = document.getElementById("user");
-
-  let touchstartX = 0;
-  let touchendX = 0;
-
-  function checkDirection() {
-    if (touchendX < touchstartX) {
-      user.classList.remove("active-user");
-    }
-    if (touchendX > touchstartX) {
-      user.classList.add("active-user");
-    }
+  const newDate = new Date().getSeconds();
+  seconds = newDate - firstTime;
+  if (seconds < 0) {
+    seconds += 60;
   }
 
-  document.body.addEventListener("click", (e) => {
-    const profile = document.querySelector("#user.active-user");
+  if (seconds >= 59) {
+    minutes++;
+  }
+  if (minutes >= 60) {
+    hours = hours + Math.floor(minutes / 60);
+    minutes = minutes % 60;
+  }
+  timer.textContent = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
 
-    if (!profile) {
-      return null;
-    }
+// Active Nav
 
-    const path = e.path || (e.composedPath && e.composedPath());
-    if (path.includes(profile)) {
-      return;
-    }
-    profile.classList.remove("active-user");
-  });
+const navProfile = document.getElementById("i_nav-profile");
+const navMap = document.getElementById("i_nav-map");
+const navTimer = document.getElementById("i_nav-timer");
 
-  document.addEventListener("touchstart", (e) => {
-    touchstartX = e.changedTouches[0].screenX;
-  });
+navMap.addEventListener("click", () =>
+  changeNav(navMap, [navProfile, navTimer])
+);
+navProfile.addEventListener("click", () =>
+  changeNav(navProfile, [navTimer, navMap])
+);
+navTimer.addEventListener("click", () =>
+  changeNav(navTimer, [navProfile, navMap])
+);
 
-  document.addEventListener("touchend", (e) => {
-    touchendX = e.changedTouches[0].screenX;
-    checkDirection();
-  });
+const changeNav = (btnAdd, removeBtns) => {
+  btnAdd.classList.add("i_active");
+  removeBtns.forEach((item) => item.classList.remove("i_active"));
+};
+
+// Open Window User
+
+let user;
+let touchstartX = 0;
+let touchendX = 0;
+function checkDirection() {
+  if (touchendX < touchstartX) {
+    user.classList.remove("active-user");
+  }
+  if (touchendX > touchstartX && user) {
+    user.classList.add("active-user");
+  }
+}
+
+document.body.addEventListener("click", (e) => {
+  const profile = document.querySelector("#user.active-user");
+  if (!profile) {
+    return;
+  }
+
+  const path = e.path || (e.composedPath && e.composedPath());
+  if (path.includes(profile)) {
+    return;
+  }
+  profile.classList.remove("active-user");
 });
+
+document.addEventListener("touchstart", (e) => {
+  user = document.getElementById("user");
+  touchstartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener("touchend", (e) => {
+  touchendX = e.changedTouches[0].screenX;
+  checkDirection();
+});
+
+// Routing
+
+document.addEventListener("click", (e) => {
+  const { target } = e;
+  if (!target.matches("nav a")) {
+    return;
+  }
+  e.preventDefault();
+  route();
+});
+
+const routes = {
+  "/TT_WB/": "/activity.html",
+  "/map": "/map.html",
+  "/timer": "/timer.html",
+};
+
+const route = (event) => {
+  event = event || window.event;
+  event.preventDefault();
+  window.history.pushState({}, "", event.target.href);
+  handleLocation();
+};
+
+const handleLocation = async () => {
+  const path = window.location.pathname.replace(/index\.html/, "");
+  const route = routes[path];
+  const html = await fetch(route).then((data) => data.text());
+  document.getElementById("content").innerHTML = html;
+  if (path === "/map") {
+    openMap();
+  }
+};
+
+window.addEventListener("popstate", handleLocation);
+
+window.route = route;
+
+handleLocation();
