@@ -10,11 +10,71 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <script type="module" src="./js/index.js"></script>
     <script
       src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=c1450b39-520c-4ad1-a72f-5e076f1b9e7e"
       type="text/javascript"
     ></script>
+    <!-- <script
+      src="https://api-maps.yandex.ru/v3/?apikey=f5cefdc8-ad4c-4e6d-a919-c9cfa6626056&lang=en_US"
+      type="text/javascript"
+    ></script> -->
+    <script type="text/javascript">
+      function openMap() {
+        const map = document.getElementById("map");
+        const loader = document.getElementById("loader");
+        if (map) {
+          ymaps.ready(init);
+
+          var myMap;
+
+          function init() {
+            myMap = new ymaps.Map("map", {
+              center: [56.75351637162591, 37.16410006869976],
+              zoom: 17,
+            });
+
+            myMap.controls.add(new ymaps.control.ZoomControl());
+
+            myPlacemark = new ymaps.Placemark(
+              [56.75351637162591, 37.16410006869976],
+              {
+                balloonContent:
+                  "<div class='ya_map'>Wee Bee<img src='https://web-bee.ru/_nuxt/img/logo.5671a63.svg'></div>", // Подсказка метки
+              },
+              {
+                preset: "twirl#redDotIcon",
+              }
+            );
+          }
+          loader.classList.remove("show");
+        }
+      }
+
+      myMap.geoObjects.add(myPlacemark);
+      // window.map = null;
+      // const LOCATION = {
+      //   center: [56.75351637162591, 37.16410006869976], // starting position [lng, lat]
+      //   zoom: 17, // starting zoom
+      // };
+
+      // main();
+      // async function main() {
+      //   // Waiting for all api elements to be loaded
+      //   await ymaps3.ready;
+      //   const { YMap, YMapDefaultSchemeLayer } = ymaps3;
+      //   // Initialize the map
+      //   map = new YMap(
+      //     // Pass the link to the HTMLElement of the container
+      //     document.getElementById("map"),
+      //     // Pass the map initialization parameters
+      //     { location: LOCATION, showScaleInCopyrights: true },
+      //     // Add a map scheme layer
+      //     [new YMapDefaultSchemeLayer({})]
+      //   );
+      // }
+      // }
+    </script>
+    <script type="module" src="./js/index.js"></script>
   </head>
   <body>
     <div class="i_wrapper">
@@ -549,42 +609,5 @@
     </div>
 
     <script src="./js/bootstrap.bundle.min.js"></script>
-
-    <script type="text/javascript">
-      function openMap() {
-        const map = document.getElementById("map");
-        const loader = document.getElementById("loader");
-        if (map) {
-          ymaps.ready(init);
-
-          var myMap;
-
-          function init() {
-            myMap = new ymaps.Map("map", {
-              center: [56.75351637162591, 37.16410006869976],
-              zoom: 17,
-            });
-
-            myMap.controls.add(new ymaps.control.ZoomControl());
-
-            myPlacemark = new ymaps.Placemark(
-              [56.75351637162591, 37.16410006869976],
-              {
-                balloonContent:
-                  "<div class='ya_map'>Wee Bee<img src='https://web-bee.ru/_nuxt/img/logo.5671a63.svg'></div>", // Подсказка метки
-              },
-              {
-                preset: "twirl#redDotIcon",
-              }
-            );
-
-            myMap.geoObjects.add(myPlacemark);
-
-            loader.classList.remove("show");
-            loader.classList.add("fade");
-          }
-        }
-      }
-    </script>
   </body>
 </html>
