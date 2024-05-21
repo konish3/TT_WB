@@ -29,25 +29,19 @@ function updateTime() {
 }
 
 // Active Nav
+const navLink = document.getElementById("nav-list");
+const navLinks = navLink.querySelectorAll("a");
 
-const navProfile = document.getElementById("i_nav-profile");
-const navMap = document.getElementById("i_nav-map");
-const navTimer = document.getElementById("i_nav-timer");
-
-navMap.addEventListener("click", () =>
-  changeNav(navMap, [navProfile, navTimer])
-);
-navProfile.addEventListener("click", () =>
-  changeNav(navProfile, [navTimer, navMap])
-);
-navTimer.addEventListener("click", () =>
-  changeNav(navTimer, [navProfile, navMap])
-);
-
-const changeNav = (btnAdd, removeBtns) => {
-  btnAdd.classList.add("i_active");
-  removeBtns.forEach((item) => item.classList.remove("i_active"));
-};
+navLink.addEventListener("click", (e) => {
+  const { target } = e;
+  if (target.matches(".i_active")) {
+    return;
+  }
+  navLinks.forEach((item) =>
+    item.matches(".i_active") ? item.classList.remove("i_active") : null
+  );
+  target.classList.add("i_active");
+});
 
 // Open Window User
 
@@ -81,8 +75,47 @@ document.addEventListener("touchstart", (e) => {
   touchstartX = e.changedTouches[0].screenX;
 });
 
-  document.addEventListener("touchend", (e) => {
-    touchendX = e.changedTouches[0].screenX;
-    checkDirection();
-  });
+document.addEventListener("touchend", (e) => {
+  touchendX = e.changedTouches[0].screenX;
+  checkDirection();
 });
+
+// Routing
+
+document.addEventListener("click", (e) => {
+  const { target } = e;
+  if (!target.matches("nav a")) {
+    return;
+  }
+  e.preventDefault();
+  route();
+});
+
+const routes = {
+  "/TT_WB/": "/TT_WB/pages/activity/activity.html",
+  "/TT_WB/map": "/TT_WB/pages/map/map.html",
+  "/TT_WB/timer": "/TT_WB/pages/timer/timer.html",
+};
+
+const route = (event) => {
+  event = event || window.event;
+  event.preventDefault();
+  window.history.pushState({}, "", event.target.href);
+  handleLocation();
+};
+
+const handleLocation = async () => {
+  const path = window.location.pathname.replace(/index\.html/, "");
+  const route = routes[path];
+  const html = await fetch(route).then((data) => data.text());
+  document.getElementById("content").innerHTML = html;
+  if (path === "/TT_WB/map") {
+    openMap();
+  }
+};
+
+window.addEventListener("popstate", handleLocation);
+
+window.route = route;
+
+handleLocation();
