@@ -81,47 +81,8 @@ document.addEventListener("touchstart", (e) => {
   touchstartX = e.changedTouches[0].screenX;
 });
 
-document.addEventListener("touchend", (e) => {
-  touchendX = e.changedTouches[0].screenX;
-  checkDirection();
+  document.addEventListener("touchend", (e) => {
+    touchendX = e.changedTouches[0].screenX;
+    checkDirection();
+  });
 });
-
-// Routing
-
-document.addEventListener("click", (e) => {
-  const { target } = e;
-  if (!target.matches("nav a")) {
-    return;
-  }
-  e.preventDefault();
-  route();
-});
-
-const routes = {
-  "/TT_WB/": "/activity.html",
-  "/map": "/map.html",
-  "/TT_WB/timer": "/timer.html",
-};
-
-const route = (event) => {
-  event = event || window.event;
-  event.preventDefault();
-  window.history.pushState({}, "", event.target.href);
-  handleLocation();
-};
-
-const handleLocation = async () => {
-  const path = window.location.pathname.replace(/index\.html/, "");
-  const route = routes[path];
-  const html = await fetch(route).then((data) => data.text());
-  document.getElementById("content").innerHTML = html;
-  if (path === "/map") {
-    openMap();
-  }
-};
-
-window.addEventListener("popstate", handleLocation);
-
-window.route = route;
-
-handleLocation();
